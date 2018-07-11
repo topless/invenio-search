@@ -19,21 +19,25 @@ from flask import request
 
 from invenio_search.api import DefaultFilter, RecordsSearch
 
+# https://goo.gl/yAA3oS
+# from ES version 6.2 empty search doesn't create query property
+ES_VERSION_GT_62 = ES_VERSION[0] == 6 and ES_VERSION[1] >= 2
+
 
 def test_empty_query(app):
     """Test building an empty query."""
 
-    # https://github.com/elastic/elasticsearch-dsl-py/blob/master/Changelog.rst#620-2018-07-03
-    # from version ES6.2, empty search defaults to empty query.
-    empty_query = {'match_all': {}}
-    if ES_VERSION[0] == 6 and ES_VERSION[1] >= 2:
-        empty_query = {}
-
     q = RecordsSearch()
-    assert q.to_dict()['query'] == empty_query
+    if ES_VERSION_GT_62:
+        assert 'query' not in q.to_dict()
+    else:
+        assert q.to_dict()['query'] == {'match_all': {}}
 
     q = RecordsSearch.faceted_search('')
-    assert q._s.to_dict()['query'] == empty_query
+    if ES_VERSION_GT_62:
+        assert 'query' not in q._s.to_dict()
+    else:
+        assert q._s.to_dict()['query'] == {'match_all': {}}
 
     q = RecordsSearch()[10]
     assert q.to_dict()['from'] == 10
