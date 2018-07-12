@@ -21,23 +21,20 @@ from invenio_search.api import DefaultFilter, RecordsSearch
 
 # https://goo.gl/yAA3oS
 # from ES version 6.2 empty search doesn't create query property
-ES_VERSION_GT_62 = ES_VERSION[0] == 6 and ES_VERSION[1] >= 2
+ES_VERSION_GTE_62 = ES_VERSION[0] >= 6 and ES_VERSION[1] >= 2
 
 
 def test_empty_query(app):
     """Test building an empty query."""
 
     q = RecordsSearch()
-    if ES_VERSION_GT_62:
+    qf = RecordsSearch.faceted_search('')
+    if ES_VERSION_GTE_62:
         assert 'query' not in q.to_dict()
+        assert 'query' not in qf._s.to_dict()
     else:
         assert q.to_dict()['query'] == {'match_all': {}}
-
-    q = RecordsSearch.faceted_search('')
-    if ES_VERSION_GT_62:
-        assert 'query' not in q._s.to_dict()
-    else:
-        assert q._s.to_dict()['query'] == {'match_all': {}}
+        assert qf._s.to_dict()['query'] == {'match_all': {}}
 
     q = RecordsSearch()[10]
     assert q.to_dict()['from'] == 10
