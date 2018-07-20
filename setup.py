@@ -35,7 +35,7 @@ extras_require = {
     # Elasticsearch version
     'elasticsearch2': [
         'elasticsearch>=2.0.0,<3.0.0',
-        'elasticsearch-dsl>=2.0.0,<3.0.0',
+        'elasticsearch-dsl>=5.1.0,<7.0.0',
     ],
     'elasticsearch5': [
         'elasticsearch>=5.0.0,<6.0.0',
