@@ -29,7 +29,7 @@ tests_require = [
 
 extras_require = {
     'docs': [
-        'Sphinx>=1.5.6,<1.6',
+        'Sphinx>=1.5.6,<1.9',
         'invenio-accounts>=1.0.0',
     ],
     # Elasticsearch version
