@@ -71,7 +71,7 @@ install_requires = [
     # requests has hard version range dependency on idna
     # Every time idna and urllib3 are updated, installation breaks because
     # elasticsearch and requests dependencies are not resolved properly.
-    'urllib3<1.24,>=1.21.1',  # from elasticsearch and requests
+    'urllib3>=1.21.1,<1.25',  # from elasticsearch and requests
     'idna>=2.5,<2.8',   # from requests
 ]
 
